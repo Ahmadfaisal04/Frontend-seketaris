@@ -35,6 +35,19 @@ const HeaderBox = styled(Box)({
   alignItems: 'center'
 });
 
+const AddButton = styled(Button)({
+  backgroundColor: '#ffffff',
+  color: '#2e7d32',
+  borderRadius: '12px',
+  textTransform: 'none',
+  fontWeight: 600,
+  padding: '12px 24px',
+  '&:hover': {
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.1)',
+  },
+});
+
 const FilePreviewBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -256,185 +269,188 @@ export default function SuratMasuk() {
   };
 
   return (
-    <StyledCard>
-      <HeaderBox>
-        <Typography variant="h6">Data Surat Masuk</Typography>
-        <Button
-          variant="contained"
-          color="success"
-          startIcon={<AddIcon />}
-          onClick={() => {
-            setShowModal(true);
-            setEditingId(null);
-            setFormData({
-              nomor: '',
-              tanggal: null,
-              perihal: '',
-              asal: '',
-              file: null
-            });
-            setPreviewFile(null);
-            setExistingFile(null);
-            setError(null);
-          }}
-        >
-          Tambah Surat
-        </Button>
-      </HeaderBox>
+    <Box sx={{ p: { xs: 2, sm: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <StyledCard>
+        <HeaderBox>
+          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+            Pengelolaan Surat Masuk
+          </Typography>
+          <AddButton
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              setShowModal(true);
+              setEditingId(null);
+              setFormData({
+                nomor: '',
+                tanggal: null,
+                perihal: '',
+                asal: '',
+                file: null
+              });
+              setPreviewFile(null);
+              setExistingFile(null);
+              setError(null);
+            }}
+          >
+            Tambah Surat
+          </AddButton>
+        </HeaderBox>
 
-      <CardContent>
-        {loading && <CircularProgress />}
-        {error && <Alert severity="error">{error}</Alert>}
+        <CardContent>
+          {loading && <CircularProgress />}
+          {error && <Alert severity="error">{error}</Alert>}
 
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell><strong>Nomor Surat</strong></TableCell>
-                <TableCell><strong>Tanggal</strong></TableCell>
-                <TableCell><strong>Perihal</strong></TableCell>
-                <TableCell><strong>Asal</strong></TableCell>
-                <TableCell><strong>File</strong></TableCell>
-                <TableCell><strong>Aksi</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.nomor}</TableCell>
-                  <TableCell>{dayjs(row.tanggal).format('DD-MM-YYYY')}</TableCell>
-                  <TableCell>{row.perihal}</TableCell>
-                  <TableCell>{row.asal}</TableCell>
-                  <TableCell>
-                    {row.file && (
-                      <Tooltip title="Lihat File">
-                        <IconButton
-                          component="a"
-                          href={`http://localhost:8088/${row.file.replace(/^\./, '')}`}
-                          target="_blank"
-                        >
-                          <DescriptionIcon />
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell><strong>Nomor Surat</strong></TableCell>
+                  <TableCell><strong>Tanggal</strong></TableCell>
+                  <TableCell><strong>Perihal</strong></TableCell>
+                  <TableCell><strong>Asal</strong></TableCell>
+                  <TableCell><strong>File</strong></TableCell>
+                  <TableCell><strong>Aksi</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.nomor}</TableCell>
+                    <TableCell>{dayjs(row.tanggal).format('DD-MM-YYYY')}</TableCell>
+                    <TableCell>{row.perihal}</TableCell>
+                    <TableCell>{row.asal}</TableCell>
+                    <TableCell>
+                      {row.file && (
+                        <Tooltip title="Lihat File">
+                          <IconButton
+                            component="a"
+                            href={`http://localhost:8088/${row.file.replace(/^\./, '')}`}
+                            target="_blank"
+                          >
+                            <DescriptionIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title="Edit">
+                        <IconButton onClick={() => handleEdit(row)}>
+                          <EditIcon />
                         </IconButton>
                       </Tooltip>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Tooltip title="Edit">
-                      <IconButton onClick={() => handleEdit(row)}>
-                        <EditIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Hapus">
-                      <IconButton onClick={() => handleDeleteClick(row.id)}>
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <TablePagination
-            component="div"
-            count={rows.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </TableContainer>
-      </CardContent>
-
-      {/* Dialog Form */}
-      <Dialog open={showModal} onClose={() => setShowModal(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>{editingId ? 'Edit Surat Masuk' : 'Tambah Surat Masuk'}</DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth margin="dense" label="Nomor Surat" name="nomor"
-            value={formData.nomor} onChange={handleInputChange}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Tanggal"
-              value={formData.tanggal}
-              onChange={handleDateChange}
-              slotProps={{ textField: { fullWidth: true, margin: 'dense' } }}
+                      <Tooltip title="Hapus">
+                        <IconButton onClick={() => handleDeleteClick(row.id)}>
+                          <DeleteIcon color="error" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <TablePagination
+              component="div"
+              count={rows.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
-          </LocalizationProvider>
-          <TextField
-            fullWidth margin="dense" label="Perihal" name="perihal"
-            value={formData.perihal} onChange={handleInputChange}
-          />
-          <TextField
-            fullWidth margin="dense" label="Asal Surat" name="asal"
-            value={formData.asal} onChange={handleInputChange}
-          />
-          <Button variant="outlined" component="label" sx={{ mt: 2 }}>
-            Pilih File
-            <input type="file" name="file" hidden onChange={handleInputChange} />
-          </Button>
-          {(previewFile || existingFile) && (
-            <FilePreviewBox>
-              <Avatar><DescriptionIcon /></Avatar>
-              <Typography variant="body2">
-                {formData.file?.name || existingFile?.split('/').pop()}
-              </Typography>
-              {(previewFile || existingFile) && (
-                <a
-                  href={previewFile || `http://localhost:8088${existingFile.replace(/^\./, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button size="small">Lihat</Button>
-                </a>
-              )}
-            </FilePreviewBox>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowModal(false)}>Batal</Button>
-          <Button
-            onClick={handleSave}
-            variant="contained"
-            disabled={loading || (editingId && !isFormChanged())}
-          >
-            {editingId ? 'Update' : 'Simpan'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </TableContainer>
+        </CardContent>
 
-      {/* Snackbar for notifications */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: '100%' }}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+        {/* Dialog Form */}
+        <Dialog open={showModal} onClose={() => setShowModal(false)} maxWidth="sm" fullWidth>
+          <DialogTitle>{editingId ? 'Edit Surat Masuk' : 'Tambah Surat Masuk'}</DialogTitle>
+          <DialogContent>
+            <TextField
+              fullWidth margin="dense" label="Nomor Surat" name="nomor"
+              value={formData.nomor} onChange={handleInputChange}
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Tanggal"
+                value={formData.tanggal}
+                onChange={handleDateChange}
+                slotProps={{ textField: { fullWidth: true, margin: 'dense' } }}
+              />
+            </LocalizationProvider>
+            <TextField
+              fullWidth margin="dense" label="Perihal" name="perihal"
+              value={formData.perihal} onChange={handleInputChange}
+            />
+            <TextField
+              fullWidth margin="dense" label="Asal Surat" name="asal"
+              value={formData.asal} onChange={handleInputChange}
+            />
+            <Button variant="outlined" component="label" sx={{ mt: 2 }}>
+              Pilih File
+              <input type="file" name="file" hidden onChange={handleInputChange} />
+            </Button>
+            {(previewFile || existingFile) && (
+              <FilePreviewBox>
+                <Avatar><DescriptionIcon /></Avatar>
+                <Typography variant="body2">
+                  {formData.file?.name || existingFile?.split('/').pop()}
+                </Typography>
+                {(previewFile || existingFile) && (
+                  <a
+                    href={previewFile || `http://localhost:8088${existingFile.replace(/^\./, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button size="small">Lihat</Button>
+                  </a>
+                )}
+              </FilePreviewBox>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowModal(false)}>Batal</Button>
+            <Button
+              onClick={handleSave}
+              variant="contained"
+              disabled={loading || (editingId && !isFormChanged())}
+            >
+              {editingId ? 'Update' : 'Simpan'}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-      {/* Delete confirmation dialog */}
-      <Dialog
-        open={deleteDialog.open}
-        onClose={handleDeleteDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Apakah Anda yakin?</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Data yang dihapus tidak dapat dikembalikan.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteDialogClose}>Batal</Button>
-          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
-            Ya, Hapus
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </StyledCard>
+        {/* Snackbar for notifications */}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: '100%' }}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+
+        {/* Delete confirmation dialog */}
+        <Dialog
+          open={deleteDialog.open}
+          onClose={handleDeleteDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Apakah Anda yakin?</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Data yang dihapus tidak dapat dikembalikan.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDeleteDialogClose}>Batal</Button>
+            <Button onClick={handleDeleteConfirm} color="error" autoFocus>
+              Ya, Hapus
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </StyledCard>
+    </Box>
   );
 }

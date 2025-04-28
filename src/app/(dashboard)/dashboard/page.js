@@ -27,7 +27,7 @@ const StyledCard = styled(Card)`
     const gradients = {
       blue: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
       green: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
-      red: 'linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%)',
+      kuning: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
     };
     return gradients[variant] || gradients.blue;
   }};
@@ -188,7 +188,7 @@ export default function Dashboard() {
             </StyledCard>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <StyledCard variant="red">
+            <StyledCard variant="kuning">
               <ContentWrapper>
                 <Typography variant="h6">Total Surat Keluar</Typography>
                 <Typography variant="h3" sx={{ fontWeight: 700 }}>

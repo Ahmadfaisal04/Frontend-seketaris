@@ -124,7 +124,7 @@ export default function ArsipSurat() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ p: { xs: 2, sm: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <Box sx={{ p: { xs: 2, sm: 3, md: 4 }, display: 'flex', flexDirection: 'column', gap: 3 }}>
         {/* Header */}
         <StyledCard>
           <ContentWrapper>

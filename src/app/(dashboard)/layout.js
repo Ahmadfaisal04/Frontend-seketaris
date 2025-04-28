@@ -197,7 +197,7 @@ export default function DashboardLayout({ children }) {
           <ListItemIcon sx={{ minWidth: 40, color: 'inherit' }}>
             <LogoutIcon />
           </ListItemIcon>
-          <ListItemText primary="Logout" />
+          <ListItemText primary="Keluar" />
         </ListItem>
       </List>
     </Box>
@@ -206,7 +206,7 @@ export default function DashboardLayout({ children }) {
   return (
     <Box sx={{ 
       display: 'flex', 
-      bgcolor: darkMode ? '#1a1a1a' : '#F8F9FA', 
+      bgcolor: darkMode ? '#1E1E1E' : '#F8F9FA', 
       minHeight: '100vh',
       color: darkMode ? '#fff' : colors.text.primary,
     }}>
@@ -221,7 +221,7 @@ export default function DashboardLayout({ children }) {
             xs: 0,
             sm: miniSidenav ? '80px' : '280px'
           },
-          bgcolor: darkMode ? 'rgba(26, 26, 26, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+          bgcolor: darkMode ? 'rgba(30, 30, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)',
           backdropFilter: 'blur(6px)',
           color: darkMode ? '#fff' : colors.text.primary,
           boxShadow: 'none',
@@ -283,7 +283,7 @@ export default function DashboardLayout({ children }) {
                   borderRadius: '12px',
                   minWidth: '200px',
                   boxShadow: shadows.card,
-                  bgcolor: darkMode ? '#1a1a1a' : 'white',
+                  bgcolor: darkMode ? '#1E1E1E' : 'white',
                   color: darkMode ? '#fff' : 'inherit',
                   '& .MuiListItemIcon-root': {
                     color: darkMode ? '#fff' : 'inherit',
@@ -298,22 +298,6 @@ export default function DashboardLayout({ children }) {
                 <ListItemText>{darkMode ? 'Light Mode' : 'Dark Mode'}</ListItemText>
               </MenuItem>
             </Menu>
-            <Box 
-              sx={{ 
-                width: 36,
-                height: 36,
-                bgcolor: colors.primary.main,
-                color: 'white',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 'bold',
-                fontSize: '0.875rem'
-              }}
-            >
-              {user?.name?.charAt(0) || 'A'}
-            </Box>
           </Box>
         </Toolbar>
       </AppBar>
@@ -330,7 +314,7 @@ export default function DashboardLayout({ children }) {
           '& .MuiDrawer-paper': { 
             boxSizing: 'border-box', 
             width: { xs: '240px', sm: '280px' },
-            bgcolor: darkMode ? '#1a1a1a' : 'white',
+            bgcolor: darkMode ? '#1E1E1E' : 'white',
             borderRight: 'none',
             boxShadow: shadows.card,
             color: darkMode ? '#fff' : colors.text.primary,
@@ -354,7 +338,7 @@ export default function DashboardLayout({ children }) {
           '& .MuiDrawer-paper': { 
             boxSizing: 'border-box', 
             width: miniSidenav ? '80px' : '280px',
-            bgcolor: darkMode ? '#1a1a1a' : 'white',
+            bgcolor: darkMode ? '#1E1E1E' : 'white',
             borderRight: 'none',
             boxShadow: shadows.card,
             color: darkMode ? '#fff' : colors.text.primary,
@@ -396,7 +380,7 @@ export default function DashboardLayout({ children }) {
             py: 3,
             px: 2,
             mt: 'auto',
-            backgroundColor: darkMode ? 'rgba(26, 26, 26, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+            backgroundColor: darkMode ? 'rgba(30, 30, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)',
             backdropFilter: 'blur(6px)',
             borderTop: '1px solid',
             borderColor: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
